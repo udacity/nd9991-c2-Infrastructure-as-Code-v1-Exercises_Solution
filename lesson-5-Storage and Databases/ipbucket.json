@@ -1,0 +1,20 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "IPAllow",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:*",
+            "Resource": "arn:aws:s3:::cloudpointers.com/*",
+            "Condition": {
+                "IpAddress": {
+                    "aws:SourceIp": "178.148.109.0/24"
+                },
+                "NotIpAddress": {
+                    "aws:SourceIp": "178.148.109.222"
+                }
+            }
+        }
+    ]
+}

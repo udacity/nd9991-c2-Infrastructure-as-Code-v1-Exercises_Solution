@@ -1,0 +1,54 @@
+
+
+In order to create a database in CloudFormation,
+you'll need a Subnet group created, a Security Group that will control access in and out of your database.
+
+A user name and a password that will serve as the master for this db server. this should be parameters
+in your script.
+
+You'll also need subnets , ideally 2.
+
+BEST PRACTICE : 
+Add DeletionPolicy and set it to Retain at the bottom of your DB Creation script,
+this way you don't lose your database if you accidentally delete your stack.
+( Keep this in mind if you indeed intend to delete this DB when done practicing)
+
+
+
+
+
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  DBSubnetGroup1:
+    Type: "AWS::RDS::DBSubnetGroup"
+    Properties: 
+      DBSubnetGroupDescription: "Subnets to use for the DB"
+      DBSubnetGroupName: "Subnet Group"
+      SubnetIds:
+      - Fn::ImportValue:
+          !Sub "${EnvironmentName}-PrivateSubnet1"
+      - Fn::ImportValue:
+          !Sub "${EnvironmentName}-PrivateSubnet2"
+  MyDB: 
+    Type: "AWS::RDS::DBInstance"
+    Properties: 
+      VPCSecurityGroups:
+        - !Ref SomeSecurityGroup
+      PubliclyAccessible: false
+      MultiAZ: false
+      AllocatedStorage: 
+        !Ref DBStorage
+      DBInstanceClass: 
+        !Ref DBInstanceClass
+      Engine: "mysql"
+      MasterUsername: 
+        !Ref DBUsername
+      MasterUserPassword: 
+        !Ref DBPassword
+      Timezone: 'Central Standard Time'
+      DBSubnetGroupName: !Ref DBSubnetGroup1
+      Tags: 
+        - 
+          Key: "Name"
+          Value: !Sub "${EnvironmentName} MS SQL RDS"
+    DeletionPolicy: "Retain"

@@ -1,0 +1,13 @@
+
+In the console,
+Create an EC2 instance that you can SSH into.
+Download a new SSH Key if you dont have one already.
+
+In IAM, Create a role associated with EC2.
+Give this role the first policy on the list, which is Admin Access.
+
+Assign the role by right-clicking your instance 
+and going to setting and then "Assign/Change IAM Role"
+
+the AWS CLI tool will be installed already if you chose Amazon Linux,
+if not, download and install, and test it.

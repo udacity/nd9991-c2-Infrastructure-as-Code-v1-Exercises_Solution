@@ -1,0 +1,49 @@
+After setting up an S3 Bucket with Static Web Hosting.
+You'll need a public policy to allow everyone access to it, like this:
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "IPAllow",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:*",
+            "Resource": "arn:aws:s3:::Your_Bucket_Name_Here/*"
+        }
+    ]
+}
+
+One could argue that this is TOO OPEN and dangerous, but the purpose of this exercise is to restrict
+this access to our IP address only. This is achieved with this policy:
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "IPAllow",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:*",
+            "Resource": "arn:aws:s3:::Your_Bucket_Name_Here/*",
+            "Condition": {
+                "IpAddress": {
+                    "aws:SourceIp": "Your_IP_Address_here/32"
+                }
+            }
+        }
+    ]
+}
+
+It's the same policy , but now we added a condition to check the source IP of the incoming traffic.
+
+Commands:
+
+With this command , you can change/set the bucket policy:
+
+ aws s3api put-bucket-policy --bucket bucketName --policy file://ipbucket.json
+
+With this command we can verify the existing policy of our bucket:
+
+aws s3api get-bucket-policy --bucket bucketName
+
