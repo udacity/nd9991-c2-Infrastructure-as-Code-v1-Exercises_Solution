@@ -1,0 +1,41 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+  EnvironmentName:
+    Description: An environment name that will be prefixed to resource names
+    Type: String 
+  myUsername:
+    Description: Any username
+    Type: String 
+  myPassword:
+    Description: A password with at least 8 characters
+    Type: String  
+Resources:
+  # Choose a name of your choice
+  myDBSubnetGroup11:
+    Type: "AWS::RDS::DBSubnetGroup"
+    Properties: 
+      DBSubnetGroupDescription: "Subnets to use for the DB"
+      DBSubnetGroupName: "Subnet Group"
+      # Replace these IDs, as applicable to you
+      SubnetIds:
+      - subnet-045e261987a91fa63
+      - subnet-056e13b0a88c48a92
+  # Choose a name of your choice    
+  MyDB: 
+    Type: "AWS::RDS::DBInstance"
+    Properties: 
+      # Replace this ID, as applicable to you. I have used the default SG. 
+      VPCSecurityGroups: [sg-031783deb58005940]
+      PubliclyAccessible: false
+      MultiAZ: false
+      AllocatedStorage: 20
+      DBInstanceClass: db.t2.small
+      Engine: "mysql"
+      MasterUsername: !Sub "${myUsername}"
+      MasterUserPassword: !Sub "${myPassword}"
+      DBSubnetGroupName: !Ref myDBSubnetGroup11
+      Tags: 
+        - 
+          Key: "Name"
+          Value: !Sub "${EnvironmentName} MS SQL RDS"
+    DeletionPolicy: "Retain"
