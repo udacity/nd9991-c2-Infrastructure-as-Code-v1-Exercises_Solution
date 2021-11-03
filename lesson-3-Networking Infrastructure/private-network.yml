@@ -118,3 +118,30 @@ Resources:
                 - Key: Name
                   Value: !Sub "${EnvironmentName} On Prem Gateway"
             Type: ipsec.1
+
+Outputs:
+    VPC:
+        Description: A reference to the created VPC
+        Value: !Ref VPC
+        Export:
+        Name: !Sub ${EnvironmentName}-VPCID
+
+    VPCVGW:
+        Description: A reference to the created VPNGateway
+        Value: !Ref VPCVGW
+        Export:
+        Name: !Sub ${EnvironmentName}-VPN-GTW-ID
+
+    AttachVpnGateway:
+        Description: A reference to the created VPCGatewayAttachment
+        Value: !Ref AttachVpnGateway
+        Export:
+        Name: !Sub ${EnvironmentName}-VPN-GTW-ATT-ID
+
+    ONPREMCGW:
+        Description: A reference to the created CustomerGateway
+        Value: !Ref ONPREMCGW
+        Export:
+        Name: !Sub ${EnvironmentName}-VPN-CUSTOMER-GTW-ID
+
+## Add more Eexports as you need for your next stack. 
